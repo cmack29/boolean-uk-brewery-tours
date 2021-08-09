@@ -20,14 +20,16 @@ formEl.addEventListener("submit", (event) => {
   fetch(url)
   .then((res) => res.json())
   .then((beerState) => {
+    const extractedCities = beerState.map(brewery => brewery.city)
     state = {
       ...state,
-      breweries: beerState
+      breweries: beerState, 
+      cities: extractedCities
     };
-    console.log("Inside GET Fetch: ", beerState);
+    console.log("Inside GET Fetch: ", state);
 
-      renderBreweriesList(beerState);
-      renderAsideElement(beerState)
+      renderBreweriesList();
+      renderAsideElement()
       // filterSearchType(beerState)
       
     
@@ -189,18 +191,20 @@ function renderAsideElement() {
   divButtonEl.className = "clear-all-btn";
   divButtonEl.innerText = "clear all";
   filterDivEl.append(divButtonEl);
-  for (let i = 0; i < state.cities.length; i++) {
-    console.log("state.cities", state.cities);
-    const filter = state.cities[i];
 
-    const formEl2 = document.createElement("form");
+  const formEl2 = document.createElement("form");
     formEl2.id = "filter-by-city-form";
     asideEl.append(formEl2);
 
+  for (let i = 0; i < state.cities.length; i++) {
+    // console.log("state.cities", state.cities);
+    const city = state.cities[i];
+
     const inputEL1 = document.createElement("input");
     inputEL1.type = "checkbox";
-    inputEL1.name = filter.city;
-    inputEL1.value = filter.city;
+    inputEL1.name = city;
+    inputEL1.value = city;
+    
     inputEL1.addEventListener("change", (event) => {
       const filterByTypeValue = event.target.value;
   
@@ -233,12 +237,13 @@ function renderAsideElement() {
     }
       console.log("inside state: ", state)
       renderAsideElement()
+      renderBreweriesList()
     });
     formEl2.append(inputEL1);
     
     const labelEl1 = document.createElement("label");
-    labelEl1.for = filter.city;
-    labelEl1.innerText = filter.city;
+    labelEl1.for = city;
+    labelEl1.innerText = city;
     formEl2.append(labelEl1);
     
   }
