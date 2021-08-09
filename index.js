@@ -28,7 +28,7 @@ formEl.addEventListener("submit", (event) => {
 
       renderBreweriesList(beerState);
       renderAsideElement(beerState)
-      filterSearchType(beerState)
+      // filterSearchType(beerState)
       
     
     // Do something with beerState
@@ -120,7 +120,7 @@ function renderBreweriesList(stateBrews) {
   }
 }
 
-function renderAsideElement(Filtering) {
+function renderAsideElement() {
   const asideEl = document.createElement("aside");
   asideEl.className = "filters-section";
   mainEl.append(asideEl);
@@ -145,19 +145,6 @@ function renderAsideElement(Filtering) {
   const filterSelectEl = document.createElement("select");
   filterSelectEl.name = "filter-by-type";
   filterSelectEl.id = "filter-by-type";
-  filterSelectEl.addEventListener("change", (event) => {
-    const filterByTypeValue = event.target.value;
-
-    state = {
-      ...state,
-      filters: {
-        ...state.filters,
-        type: filterByTypeValue
-      }
-    }
-    console.log("inside state: ", state)
-    renderBreweriesList(state.breweries)
-  });
   filterFormEl.append(filterSelectEl);
 
   const optionEl = document.createElement("option");
@@ -195,14 +182,16 @@ function renderAsideElement(Filtering) {
 
   const divTitleEl = document.createElement("h3");
   divTitleEl.innerText = "Cities";
+  
   filterDivEl.append(divTitleEl);
 
   const divButtonEl = document.createElement("button");
   divButtonEl.className = "clear-all-btn";
   divButtonEl.innerText = "clear all";
   filterDivEl.append(divButtonEl);
-  for (let i = 0; i < Filtering.length; i++) {
-    const filter = Filtering[i];
+  for (let i = 0; i < state.cities.length; i++) {
+    // console.log("state.cities", state.cities);
+    const filter = state.cities[i];
 
     const formEl2 = document.createElement("form");
     formEl2.id = "filter-by-city-form";
@@ -212,22 +201,57 @@ function renderAsideElement(Filtering) {
     inputEL1.type = "checkbox";
     inputEL1.name = filter.city;
     inputEL1.value = filter.city;
+    inputEL1.addEventListener("change", (event) => {
+      const filterByTypeValue = event.target.value;
+  
+      const filterByCityValue = state.filters.city;
+  
+      const foundCity = filterByCityValue.find(
+        (city) => city === filterByCityValue
+      );
+  
+      if (foundCity) {
+        const updatedFilterCityValue = filterByCityValue.filter(
+          (city) => city !== filterByCityValue
+        );
+  
+      state = {
+        ...state,
+        filters: {
+          ...state.filters,
+          type: filterByTypeValue
+        }
+      }
+    } else {
+      state = {
+        ...state,
+        filters: {
+          ...state.filters,
+          city: [...state.filters.city, filterByCityValue]
+        }
+      };
+    }
+      console.log("inside state: ", state)
+      renderAsideElement()
+    });
     formEl2.append(inputEL1);
-
+    
     const labelEl1 = document.createElement("label");
     labelEl1.for = filter.city;
     labelEl1.innerText = filter.city;
     formEl2.append(labelEl1);
-  }
-}
-function filterSearchType(filters) {
-  console.log("Inside filterSearchType: ", state.breweries);
-  for (let i = 0; i < filters.length; i++) {
-    const filter = filters[i];
-    const breweryType = filter.brewery_type;
     
   }
-  if (breweryType === "Micro" || "Regional" || "Brewpub") {
-
-  }
+  
 }
+// function filterSearchType(filters) {
+//   console.log("Inside filterSearchType: ", state.breweries);
+//   for (let i = 0; i < filters.length; i++) {
+//     const filter = filters[i];
+//     const breweryType = filter.brewery_type;
+    
+//   }
+//   if (breweryType === "Micro" || "Regional" || "Brewpub") {
+
+//   }
+// }
