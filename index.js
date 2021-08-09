@@ -190,7 +190,7 @@ function renderAsideElement() {
   divButtonEl.innerText = "clear all";
   filterDivEl.append(divButtonEl);
   for (let i = 0; i < state.cities.length; i++) {
-    // console.log("state.cities", state.cities);
+    console.log("state.cities", state.cities);
     const filter = state.cities[i];
 
     const formEl2 = document.createElement("form");
@@ -207,19 +207,19 @@ function renderAsideElement() {
       const filterByCityValue = state.filters.city;
   
       const foundCity = filterByCityValue.find(
-        (city) => city === filterByCityValue
+        (city) => city === filterByTypeValue
       );
   
       if (foundCity) {
         const updatedFilterCityValue = filterByCityValue.filter(
-          (city) => city !== filterByCityValue
+          (city) => city !== filterByTypeValue
         );
   
       state = {
         ...state,
         filters: {
           ...state.filters,
-          type: filterByTypeValue
+          city: updatedFilterCityValue
         }
       }
     } else {
@@ -227,7 +227,7 @@ function renderAsideElement() {
         ...state,
         filters: {
           ...state.filters,
-          city: [...state.filters.city, filterByCityValue]
+          city: [...state.filters.city, filterByTypeValue]
         }
       };
     }
